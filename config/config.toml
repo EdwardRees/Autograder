@@ -1,0 +1,6 @@
+[ class ]
+
+course_name = "cs110-spring-24"  # GitHub Classroom name
+student_names = "config/student_accounts.csv" # File name for the student accounts csv file
+
+
