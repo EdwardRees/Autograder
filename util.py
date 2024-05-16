@@ -1,5 +1,18 @@
 import toml
 from csv import reader
+from os import path, walk
+from os.path import isdir, sep
+
+def walklevel(dir, level=0):
+  dir = dir.rstrip(path.sep)
+  assert isdir(dir)
+  num_sep = dir.count(path.sep)
+  for root, dirs, files in walk(dir):
+    yield root, dirs, files
+    inner_num_sep = root.count(path.sep)
+    if num_sep + level <= inner_num_sep:
+      del dirs[:]
+
 
 def read_csv(filename):
     try:

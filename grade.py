@@ -2,6 +2,7 @@
 from sys import argv
 from clone import clone
 from util import get_course_name, get_name_username_pair, get_username_name_pair, get_student_usernames, read_config, read_csv
+from clean import clean
 
 
 def parse_args(argv):
@@ -34,6 +35,8 @@ def main():
 
   if arguments.get("type") == "clone":
     clone(course_name, arguments.get("assignment_type"), arguments.get("assignment_name"), usernames)
+  elif arguments.get("type") == "clean":
+    clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
 
 
 if __name__ == "__main__":
