@@ -22,6 +22,7 @@ In the `config.toml` in the `config` folder, set the followign variables:
 2. `student_names` should be set to the `csv` file containing the student names and username pairs.
 3. `debug mode` should be set to `true` if the output should include `debug` level logged values. Otherwise this can be `false` if only `info` level values are required.
 4. `log_destination` should be set to the name of the log file.
+5. `test_repo` should be set the GitHub repository that contains testcases.
 
 ### Adding the alias
 
@@ -32,6 +33,7 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 - Python3
 - toml
 - logging
+- shutils
 
 ## Features
 
@@ -44,8 +46,9 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 - `--assignment <project/lab/inclass> --name <number/assignment name>`
 - `--student <name>`: Name for the student to work with. This is optional, by default it will work with all students in the class.
 - `--username <username>`: Same as the name for the student to work with. This will apply the choice against a username of a student. By default, it will use all students in the class instead of a specific student.
+- `--pull`: Don't clone, but pull the given project. If `--pull` is called on `test`, pull the tests.
 
 ## How to use
 
-`grade <clone/test/clean/analyze> --assignment <project/lab/inclass> --name <number/assignment name> --student <name> --username <student username>`
+`grade <clone/test/clean/analyze> --assignment <project/lab/inclass> --name <number/assignment name> --student <name> --username <student username> --pull`
 

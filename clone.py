@@ -1,24 +1,17 @@
-from os import system, mkdir, remove, getcwd, chdir
-from os.path import isdir
 import logging
+from os import system, mkdir, remove, getcwd, chdir, path
+from os.path import isdir
+from util import navigate_to_dir
+from clean import remove_dir
 
 logger = logging.getLogger(__name__)
+curr_dir = path.dirname(path.realpath(__file__))
 
 def generate_assignment_link(course_name, assignment_type, assignment_name, username):
     return f"git@github.com:{course_name}/{assignment_type}-{assignment_name}-{username}"
 
 def nav_to_assignments():
-    pwd = getcwd().split("/")
-    if "autograder" == pwd[-1]:
-        chdir("assignments")
-        return getcwd().split("/")
-    if pwd[-2:] != ['autograder', 'assignments']:
-        assignment_idx = pwd.index("assignments")
-        backtracks = len(pwd) - assignment_idx
-        for _ in range(backtracks):
-            chdir("..")
-    logger.debug(f"Navigated to {getcwd()}")
-    return getcwd().split("/")
+    return navigate_to_dir("assignments")
 
 def get_username(names, name):
     for (student_name, username) in names.items():
@@ -40,10 +33,11 @@ def clone_assignment(course_name, assignment_type, assignment_name, username):
     system(f"git clone {url}")
     chdir(dir_name)
     logger.debug(f"Cloned {dir_name}")
-    system("rm -rf .git")
+    remove_dir(".git")
     logger.debug(f"Removed .git folder")
     chdir("..")
     logger.debug(f"Returned to {getcwd()}")
+    return
 
 def clone(course_name, assignment_type, assignment_name, student_usernames):
     if assignment_type not in ["project", "lab", "inclass"]:
@@ -68,4 +62,18 @@ def clone(course_name, assignment_type, assignment_name, student_usernames):
     logger.debug(f"Successfully cloned: {cloned_repos.get('successful')}")
     logger.debug(f"Failed to clone: {cloned_repos.get('unsuccessful')}")
     logger.debug(f"Navigated back to {getcwd()}")
+    return
+
+def test_cloned_check(assignment_type, assignment_name):
+  assignment_string = f"{assignment_type}-{assignment_name}"
+  logger.debug(f"Checking {curr_dir}/tests/{assignment_type}/{assignment_string}")
+  return isdir(f"{curr_dir}/tests/{assignment_type}/{assignment_string}")
+
+def clone_tests(test_repo):
+  # Assume tests not cloned
+  navigate_to_dir("tests")
+  system(f"git clone --depth 1 {test_repo} . ")
+  logger.info(f"Cloned test repos into tests folder")
+  return True
+
 

@@ -1,10 +1,11 @@
+import logging
 from toml import load, TomlDecodeError
 from csv import reader
-from os import path, walk
+from os import path, walk, chdir, getcwd
 from os.path import isdir, sep
-import logging
 
 logger = logging.getLogger(__name__)
+curr_dir = path.dirname(path.realpath(__file__))
 
 def walklevel(dir, level=0):
   dir = dir.rstrip(path.sep)
@@ -15,6 +16,22 @@ def walklevel(dir, level=0):
     inner_num_sep = root.count(path.sep)
     if num_sep + level <= inner_num_sep:
       del dirs[:]
+
+
+def navigate_to_dir(dir):
+  # Navigate to directory after /autograder
+  pwd = getcwd().split("/")
+  if "autograder" == pwd[-1]:
+    if isdir(dir):
+      chdir(dir)
+    return getcwd().split("/")
+  elif pwd[-2:] != ["autograder", dir]:
+    dir_idx = pwd.index(dir)
+    backtracks = len(pwd) - dir_idx
+    for _ in range(backtracks):
+      chdir("..")
+  logger.debug(f"Navigated to {getcwd()}")
+  return getcwd().split("/")
 
 
 def read_csv(filename):

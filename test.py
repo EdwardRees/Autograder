@@ -1,15 +1,23 @@
-from os import path
+from os import path, system, mkdir, remove, getcwd, chdir
 from os.path import isdir
 import logging
+from util import navigate_to_dir, walk
+from clone import test_cloned_check
 
 logger = logging.getLogger()
-curr_dir = path.dirname(path.realpath(__file__))
 
-def test_cloned_check(assignment_type, assignment_name):
-  assignment_string = f"{assignment_type}-{assignment_name}"
-  logger.debug(f"Checking {curr_dir}/tests/{assignment_type}/{assignment_string}")
-  return isdir(f"{curr_dir}/tests/{assignment_type}/{assignment_string}")
+def read_test_files(assignment_type, assignment_name):
+  navigate_to_dir("tests")
+  if not isdir(f"{assignment_type}"):
+    logger.error(f"{assignment_type} tests missing")
+  chdir(f"{assignment_type}")
+  if not isdir(f"{assignment_type}-{assignment_name}"):
+    logger.error(f"{assignment_type}-{assignment_name} tests missing")
+  chdir(f"{assignment_type}-{assignment_name}")
 
-if __name__ == "__main__":
-  print(test_cloned_check("project", "1"))
+
+def add_test_to_repo(assignment_type, assignment_name):
+  if not test_cloned_check(assignment_type, assignment_name):
+    logger.error(f"{assignment_type}-{assignment_name} not cloned!")
+    return False
 
