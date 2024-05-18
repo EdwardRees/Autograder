@@ -1,7 +1,7 @@
-from sys import argv
+from sys import argv, stdout
 from clone import clone, get_username, clone_tests, test_cloned_check
 from util import get_course_name, get_name_username_pair, get_username_name_pair, get_student_usernames, read_config, read_csv
-from clean import clean
+from clean import clean, clean_tests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -11,6 +11,9 @@ def parse_args(argv):
   argv = argv[1:]
   command_line_type = argv[0]
   arguments["type"] = command_line_type
+  if "--assignment" not in argv:
+    logger.error("Missing assignment flag!")
+    exit(-2)
   assignment_flag = argv.index("--assignment")
   arguments["assignment_type"] = argv[assignment_flag + 1]
   if "--name" in argv:
@@ -28,6 +31,7 @@ def parse_args(argv):
 
 def logger_setup(config):
   stream_handle = logging.StreamHandler()
+  stream_handle.setStream(stdout)
   file_handle = logging.FileHandler(f"log/{config.get("log").get("log_destination")}")
 
   stream_handle.setLevel(logging.DEBUG if config.get("log").get("debug") else logging.INFO)
@@ -77,8 +81,13 @@ def main():
     if arguments.get('assignment_type') == "tests":
       clone_tests(config.get("class").get("test_repo"))
     clone(course_name, arguments.get("assignment_type"), arguments.get("assignment_name"), usernames)
+
   elif arguments.get("type") == "clean":
-    clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
+    if arguments.get("assignment_type") == "tests":
+      clean_tests()
+    else:
+      clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
+
   elif arguments.get("type") == "test":
     if "pull" in arguments:
       # Simply pull the tests, don't clone the tests again. Just call pull_tests()

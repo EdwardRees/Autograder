@@ -25,5 +25,10 @@ def clean(assignment_type, assignment_name):
     return
   remove_dir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}")
 
-if __name__ == "__main__":
-  remove_dir("assignments/hello")
+def clean_tests():
+  for root, dirs, files in walklevel("tests"):
+    for dir in dirs:
+      remove_dir(f"{root}/{dir}")
+    for file in files:
+      remove(f"{root}/{file}")
+  logger.info(f"Removed tests")
