@@ -6,6 +6,10 @@ The project clones student assignments, deletes the `.git` directory, inserts te
 
 ## Setup
 
+### Installing Dependencies
+
+- Run `pip3 install toml` to install toml
+
 ### Clone the project
 
 Clone the project at `git@github.com:EdwardRees/Autograder.git`
@@ -25,7 +29,7 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 
 ## Technology
 
-- Python2
+- Python3
 - toml
 - logging
 
