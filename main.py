@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def parse_args(argv):
   arguments = {}
   argv = argv[1:]
@@ -35,20 +36,22 @@ def main():
     return
   config = read_config("config/config.toml")
 
-  stream_handle = logging.basicConfig(format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG if config.get("log").get("debug") else logging.INFO)
+  logging.basicConfig(format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG if config.get("log").get("debug") else logging.INFO)
 
-
+  stream_handle = logging.StreamHandler(stream=stdout)
   file_handle = logging.FileHandler(f"log/{config.get("log").get("log_destination")}")
   error_handle = logging.FileHandler(f"log/{config.get("log").get("error_log_destination")}")
 
+  stream_handle.setLevel(logging.DEBUG if config.get("log").get("debug") else logging.INFO)
   file_handle.setLevel(logging.DEBUG)
   error_handle.setLevel(logging.WARNING)
 
-  file_handle_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-  error_handle_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+  stream_format = logging.Formatter("[%(levelname)s] - %(name)s - %(message)s")
+  file_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
-  file_handle.setFormatter(file_handle_format)
-  error_handle.setFormatter(error_handle_format)
+  stream_handle.setFormatter(stream_format)
+  file_handle.setFormatter(file_format)
+  error_handle.setFormatter(file_format)
 
   logger.addHandler(stream_handle)
   logger.addHandler(file_handle)
@@ -56,7 +59,7 @@ def main():
 
   logger.setLevel(logging.DEBUG)
 
-  print(logger, logger.handlers)
+  # print(logger, logger.handlers)
 
   test_repos = config.get("class").get("test_repo")
   arguments = parse_args(argv)
@@ -109,8 +112,6 @@ def main():
     if not test_cloned_check(arguments.get("assignment_type"), arguments.get("assignment_name")):
       logger.info("Tests must be cloned first!")
       clone_tests(config.get("class").get("test_repo"))
-  error_handle.close()
-  file_handle.close()
   
 
 

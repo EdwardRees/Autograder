@@ -21,7 +21,7 @@ def remove_dir(path):
 
 def clean(assignment_type, assignment_name):
   if not isdir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}"):
-    logger.info(f"Assignment {assignment_type}-{assignment_name} not found")
+    logger.error(f"Assignment {assignment_type}-{assignment_name} not found")
     return
   remove_dir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}")
 
