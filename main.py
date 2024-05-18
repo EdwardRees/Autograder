@@ -28,10 +28,23 @@ def main():
     print(f"Invalid usage: {argv[0]} <clone/grade/test/analyze/clean> --assignment <project/lab/inclass> --name <number/assignment name> --student <student name> --username <username>")
     return
   config = read_config("config/config.toml")
-  # logging.basicConfig(filename="out.log", level=(logging.DEBUG if config.get("debug").get("mode") else logging.INFO))
-  logging.basicConfig(level=(logging.DEBUG if config.get("debug").get("mode") else logging.INFO))
+
+  stream_handle = logging.StreamHandler()
+  file_handle = logging.FileHandler(f"log/{config.get("log").get("log_destination")}")
+
+  stream_handle.setLevel(logging.DEBUG if config.get("log").get("debug") else logging.INFO)
+  file_handle.setLevel(logging.WARNING)
+
+  stream_handle_format = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
+  file_handle_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+  stream_handle.setFormatter(stream_handle_format)
+  file_handle.setFormatter(file_handle_format)
+
+  logger.addHandler(stream_handle)
+  logger.addHandler(file_handle)
+
   arguments = parse_args(argv)
-  logger.debug(arguments)
   course_name = get_course_name(config)
   student_csv = read_csv(config.get("class").get("student_names"))
   usernames = get_student_usernames(student_csv)

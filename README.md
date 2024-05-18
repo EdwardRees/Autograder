@@ -12,9 +12,20 @@ Clone the project at `git@github.com:EdwardRees/Autograder.git`
 
 ### Setup Configuration
 
+In the `config.toml` in the `config` folder, set the followign variables:
+
+1. `course_name` should be set to the name of the GitHub classroom name or the GitHub organization.
+2. `student_names` should be set to the `csv` file containing the student names and username pairs.
+3. `debug mode` should be set to `true` if the output should include `debug` level logged values. Otherwise this can be `false` if only `info` level values are required.
+4. `log_destination` should be set to the name of the log file.
+
+### Adding the alias
+
+Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `grade` command without needing to run it as `./grade`.
+
 ## Technology
 
-- Python3
+- Python2
 - toml
 - logging
 
@@ -32,5 +43,5 @@ Clone the project at `git@github.com:EdwardRees/Autograder.git`
 
 ## How to use
 
-`./grade <clone/test/clean/analyze> --assignment <project/lab/inclass> --name <number/assignment name> --student <name> --username <student username>`
+`grade <clone/test/clean/analyze> --assignment <project/lab/inclass> --name <number/assignment name> --student <name> --username <student username>`
 
