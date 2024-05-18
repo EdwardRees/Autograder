@@ -1,7 +1,10 @@
-import toml
+from toml import load, TomlDecodeError
 from csv import reader
 from os import path, walk
 from os.path import isdir, sep
+import logging
+
+logger = logging.getLogger(__name__)
 
 def walklevel(dir, level=0):
   dir = dir.rstrip(path.sep)
@@ -20,17 +23,19 @@ def read_csv(filename):
         with open(filename, 'r') as f:
             for line in reader(f):
                     contents.append(line)
+        logger.info(f"Successfully read {filename}")
         return contents
     except FileNotFoundError as e:
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
         return []
 
 def read_toml(filename):
     try:
         with open(filename, 'r') as f:
-            return toml.load(f)
-    except (FileNotFoundError, TypeError, toml.TomlDecodeError) as e:
-        print(f"Error: {e}")
+            logger.info(f"Successfully read {filename}")
+            return load(f)
+    except (FileNotFoundError, TypeError, TomlDecodeError) as e:
+        logger.error(f"Error: {e}")
         return {}
 
 def read_config(filename):
