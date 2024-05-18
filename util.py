@@ -82,10 +82,3 @@ def get_student_usernames(student_csv):
         usernames.append(username)
     return usernames
 
-
-if __name__ == "__main__":
-    student_csv = read_csv("config/student_accounts.csv")
-    print(get_username_name_pair(student_csv))
-    print(get_name_username_pair(student_csv))
-    print(get_student_usernames(student_csv))
-    # print(read_toml("config.toml"))

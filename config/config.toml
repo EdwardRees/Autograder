@@ -6,4 +6,5 @@ test_repo = "git@github.com:cs110-spring-24/tests.git"
 [ log ]
 debug = true # Debug mode to see output
 log_destination = "out.log" # Log file
+error_log_destination = "err.log" # Error log file
 

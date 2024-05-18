@@ -27,7 +27,8 @@ def clone_assignment(course_name, assignment_type, assignment_name, username):
         return
     dir_name = f"{assignment_type}-{assignment_name}-{username}"
     if isdir(dir_name):
-        system(f"rm {dir_name}")
+        remove_dir(f"{dir_name}")
+        logger.info(f"Directory already exists, removed {dir_name}")
     url = generate_assignment_link(course_name, assignment_type, assignment_name, username)
 
     system(f"git clone {url}")

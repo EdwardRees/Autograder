@@ -4,7 +4,7 @@ import logging
 from util import navigate_to_dir, walk
 from clone import test_cloned_check
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 def read_test_files(assignment_type, assignment_name):
   navigate_to_dir("tests")

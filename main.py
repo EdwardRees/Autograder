@@ -29,33 +29,34 @@ def parse_args(argv):
     arguments["pull"] = True
   return arguments
 
-def logger_setup(config):
-  stream_handle = logging.StreamHandler()
-  stream_handle.setStream(stdout)
-  file_handle = logging.FileHandler(f"log/{config.get("log").get("log_destination")}")
-
-  stream_handle.setLevel(logging.DEBUG if config.get("log").get("debug") else logging.INFO)
-  file_handle.setLevel(logging.WARNING)
-
-  stream_handle_format = logging.Formatter("%(name)s - %(levelname)s - %(message)s")
-  file_handle_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-
-  stream_handle.setFormatter(stream_handle_format)
-  file_handle.setFormatter(file_handle_format)
-
-  logger.addHandler(stream_handle)
-  logger.addHandler(file_handle)
-
-  return logger
-
-
 def main():
   if len(argv) < 3:
     print(f"Invalid usage: {argv[0]} <clone/grade/test/analyze/clean> --assignment <project/lab/inclass/tests> --name <number/assignment name> --student <student name> --username <username> --pull")
     return
   config = read_config("config/config.toml")
-  
-  logger_setup(config)
+
+  stream_handle = logging.basicConfig(format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG if config.get("log").get("debug") else logging.INFO)
+
+
+  file_handle = logging.FileHandler(f"log/{config.get("log").get("log_destination")}")
+  error_handle = logging.FileHandler(f"log/{config.get("log").get("error_log_destination")}")
+
+  file_handle.setLevel(logging.DEBUG)
+  error_handle.setLevel(logging.WARNING)
+
+  file_handle_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+  error_handle_format = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+  file_handle.setFormatter(file_handle_format)
+  error_handle.setFormatter(error_handle_format)
+
+  logger.addHandler(stream_handle)
+  logger.addHandler(file_handle)
+  logger.addHandler(error_handle)
+
+  logger.setLevel(logging.DEBUG)
+
+  print(logger, logger.handlers)
 
   test_repos = config.get("class").get("test_repo")
   arguments = parse_args(argv)
@@ -108,6 +109,9 @@ def main():
     if not test_cloned_check(arguments.get("assignment_type"), arguments.get("assignment_name")):
       logger.info("Tests must be cloned first!")
       clone_tests(config.get("class").get("test_repo"))
+  error_handle.close()
+  file_handle.close()
+  
 
 
 if __name__ == "__main__":
