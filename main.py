@@ -1,5 +1,5 @@
 from sys import argv, stdout
-from clone import clone, get_username, clone_tests, test_cloned_check
+from clone import clone, get_username, clone_tests, test_cloned_check, pull_tests
 from util import get_course_name, get_name_username_pair, get_username_name_pair, get_student_usernames, read_config, read_csv
 from clean import clean, clean_tests
 import logging
@@ -84,7 +84,8 @@ def main():
       usernames = [username]
     if arguments.get('assignment_type') == "tests":
       clone_tests(config.get("class").get("test_repo"))
-    clone(course_name, arguments.get("assignment_type"), arguments.get("assignment_name"), usernames)
+    else:
+      clone(course_name, arguments.get("assignment_type"), arguments.get("assignment_name"), usernames)
 
   elif arguments.get("type") == "clean":
     if arguments.get("assignment_type") == "tests":
@@ -94,8 +95,8 @@ def main():
 
   elif arguments.get("type") == "test":
     if "pull" in arguments:
-      # Simply pull the tests, don't clone the tests again. Just call pull_tests()
-      pass
+      pull_tests()
+      return
     username = ""
     if "student_name" in arguments:
       username = get_username(name_username_dictionary, arguments.get("student_name"))

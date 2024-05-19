@@ -71,10 +71,17 @@ def test_cloned_check(assignment_type, assignment_name):
   return isdir(f"{curr_dir}/tests/{assignment_type}/{assignment_string}")
 
 def clone_tests(test_repo):
-  # Assume tests not cloned
+  if not isdir("tests"):
+    mkdir("tests")
   navigate_to_dir("tests")
   system(f"git clone --depth 1 {test_repo} . ")
   logger.info(f"Cloned test repos into tests folder")
   return True
 
+
+def pull_tests():
+  navigate_to_dir("tests")
+  system("git pull")
+  logger.info(f"Pulled newest tests")
+  return True
 
