@@ -1,7 +1,7 @@
 [ class ]
 course_name = "cs110-spring-24"  # GitHub Classroom name
 student_names = "config/students-accounts.csv" # File name for the student accounts csv file
-test_repo = "git@github.com:cs110-spring-24/tests.git"
+test_repo = "git@github.com:cs110-spring-24/tests.git" # Repository with testcases
 
 [ log ]
 debug = true # Debug mode to see output

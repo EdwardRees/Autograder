@@ -20,9 +20,10 @@ In the `config.toml` in the `config` folder, set the followign variables:
 
 1. `course_name` should be set to the name of the GitHub classroom name or the GitHub organization.
 2. `student_names` should be set to the `csv` file containing the student names and username pairs.
-3. `debug mode` should be set to `true` if the output should include `debug` level logged values. Otherwise this can be `false` if only `info` level values are required.
-4. `log_destination` should be set to the name of the log file.
-5. `test_repo` should be set the GitHub repository that contains testcases.
+3. `test_repo` should be set the GitHub repository that contains testcases.
+4. `debug mode` should be set to `true` if the output should include `debug` level logged values. Otherwise this can be `false` if only `info` level values are required.
+5. `log_destination` should be set to the name of the log file.
+6. `error_log_destination` should be set to the name of the error log file.
 
 ### Adding the alias
 
