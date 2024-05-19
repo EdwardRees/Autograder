@@ -33,7 +33,7 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 - Python3
 - toml
 - logging
-- shutils
+- shutil
 
 ## Features
 
@@ -51,3 +51,16 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 ## How to use
 
 `grade <clone/test/clean/analyze> --assignment <project/lab/inclass/tests> --name <number/assignment name> --student <name> --username <student username> --pull`
+
+### Use Examples
+
+- `grade clone --assignment lab --name 5 --username johndoe` : Clone Lab 5 for johndoe specifically
+- `grade clone --assignment lab --name 5`: Clone all Lab 5s
+- `grade clone --assignment tests`: Clone the tests
+
+- `grade test --pull`: Pull the test cases
+- `grade test --assignment lab --name 5`: Test all the lab 5s, writes output into `assignmebts/lab/lab-5/results.txt`
+- `grade test --assignment lab --name 5 --username johndoe`: Test Lab 5 for johndoe specifically
+
+- `grade clean --assignment tests`: Remove the tests
+- `grade clean --assignment lab --name 5`: Remove the lab 5 repositories
