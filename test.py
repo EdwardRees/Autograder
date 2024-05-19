@@ -25,7 +25,14 @@ def read_test_files(assignment_type, assignment_name):
 
 def run_test(assignment_type, assignment_name, username):
   # TODO Run the test for an individual student 
-  pass
+  chdir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}/{assignment_type}-{assignment_name}-{username}")
+  logger.debug(f"Navigated to {getcwd()}")
+
+  system("python3 test.py > result.txt")
+  logger.debug(f"Tested for {assignment_type}-{assignment_name}-{username}")
+
+  chdir("../../../../")
+  logger.debug(f"Navigated to {getcwd()}")
 
 def add_test_to_repo(assignment_type, assignment_name):
   if not test_cloned_check(assignment_type, assignment_name):
