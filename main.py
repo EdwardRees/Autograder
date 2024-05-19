@@ -3,9 +3,9 @@ from clone import clone, get_username, clone_tests, test_cloned_check, pull_test
 from util import get_course_name, get_name_username_pair, get_username_name_pair, get_student_usernames, read_config, read_csv
 from clean import clean, clean_tests
 import logging
+from test import add_test_to_repo
 
 logger = logging.getLogger(__name__)
-
 
 def parse_args(argv):
   arguments = {}
@@ -113,6 +113,8 @@ def main():
     if not test_cloned_check(arguments.get("assignment_type"), arguments.get("assignment_name")):
       logger.info("Tests must be cloned first!")
       clone_tests(config.get("class").get("test_repo"))
+    add_test_to_repo(arguments.get("assignment_type"), arguments.get("assignment_name"))
+
   
 
 

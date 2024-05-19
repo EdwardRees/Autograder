@@ -67,8 +67,14 @@ def clone(course_name, assignment_type, assignment_name, student_usernames):
 
 def test_cloned_check(assignment_type, assignment_name):
   assignment_string = f"{assignment_type}-{assignment_name}"
-  logger.debug(f"Checking {curr_dir}/tests/{assignment_type}/{assignment_string}")
-  return isdir(f"{curr_dir}/tests/{assignment_type}/{assignment_string}")
+  logger.debug(f"Checking {curr_dir}/tests/{assignment_type}s/{assignment_string}")
+  return isdir(f"{curr_dir}/tests/{assignment_type}s/{assignment_string}")
+
+def assignment_cloned_check(assignment_type, assignment_name):
+  assignment_string = f"{assignment_type}-{assignment_name}"
+  logger.debug(f"Checking {curr_dir}/assignment/{assignment_type}s/{assignment_string}")
+  return isdir(f"{curr_dir}/assignments/{assignment_type}s/{assignment_string}")
+
 
 def clone_tests(test_repo):
   if not isdir("tests"):
