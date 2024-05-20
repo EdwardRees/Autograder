@@ -42,12 +42,12 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 
 - `clean`: Clean the files corresponding to the given assignment
 - `clone`: Clone the repositories locally
-- `test`: Test the repositories against the cloned repositories and the test cases.
+- `test` or `grade`: Test the repositories against the cloned repositories and the test cases.
 - `analyze`: Analyze the tested repositories.
 - `--assignment <project/lab/inclass/tests> --name <number/assignment name>`
 - `--student <name>`: Name for the student to work with. This is optional, by default it will work with all students in the class.
 - `--username <username>`: Same as the name for the student to work with. This will apply the choice against a username of a student. By default, it will use all students in the class instead of a specific student.
-- `--pull`: Don't clone, but pull the given project. If `--pull` is called on `test`, pull the tests.
+- `--pull` or `--update`: Don't clone, but pull the given project. If `--pull` is called on `test`, pull the tests.
 
 ## How to use
 

@@ -7,12 +7,34 @@ from test import add_test_to_repo, run_tests
 
 logger = logging.getLogger(__name__)
 
+def help_menu():
+  print(f"""
+        {argv[0]} <clone/test/grade/clean/analyze> --assignment <project/lab/inclass/tests> --name <assignment name or number> --username <username of student> --student <name of student> --pull
+        Options:
+        - Clone: Clone the given assignment repository
+        - Test/Grade: Run the tests on the given assignment 
+        - Clean: Remove the files associated with the assignment or tests
+        - Analyze: Run simple analysis on the assignment results from the tests performed
+        Command Line Flags:
+        - --assignment: The type of assignment to perform the optional action on: project, lab, inclass, or on the tests themselves
+        - --name: The name of the assignment, used to concatenate on top of the project, lab, or inclass. For example, this flag would take a number for the labs and projects, but take the name of the inclass for the inclass.
+        - --username: An optional flag used to perform the optional action on a specific student.
+        - --student: An optional flag used to perform the optional action on a specific student, with the student's name provided.
+        - --pull: An optional flag used to pull the latest test cases.
+  """)
+
+def not_in(argv, flags):
+  for flag in flags:
+    if flag in argv:
+      return False
+  return True
+
 def parse_args(argv):
   arguments = {}
   argv = argv[1:]
   command_line_type = argv[0]
   arguments["type"] = command_line_type
-  if "--assignment" not in argv and "--pull" not in argv:
+  if not_in(argv, ["--assignment", "--pull", "-h"]):
     logger.error("Missing assignment flag!")
     exit(-2)
   if "--assignment" in argv:
@@ -29,6 +51,8 @@ def parse_args(argv):
     arguments["username"] = argv[username_flag + 1]
   if "--pull" in argv or "--update" in argv:
     arguments["pull"] = True
+  if "--help" in argv or "-h" in argv:
+    arguments["help"] = True
   return arguments
 
 def main():
@@ -68,6 +92,9 @@ def main():
   student_csv = read_csv(config.get("class").get("student_names"))
   usernames = get_student_usernames(student_csv)
   name_username_dictionary = get_name_username_pair(student_csv)
+  if arguments.get("help"):
+    help_menu()
+    return
 
   if arguments.get("type") == "clone":
     username = ""
@@ -94,7 +121,7 @@ def main():
     else:
       clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
 
-  elif arguments.get("type") == "test":
+  elif arguments.get("type") == "test" or arguments.get("type") == "grade":
     if "pull" in arguments:
       pull_tests()
       return
