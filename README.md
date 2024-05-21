@@ -65,3 +65,13 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 
 - `grade clean --assignment tests`: Remove the tests
 - `grade clean --assignment lab --name 5`: Remove the lab 5 repositories
+
+## Todos
+
+- [ ] Fix logging to files
+- [ ] Implement Analyze feature
+- [ ] Implement clean on individual student
+- [ ] Fix testing individual student resets the `assignments/{assignment_type}s/results.txt`
+- [ ] Implement clone for inclass
+  - [ ] Technically a fix instead, but the format for inclass differs from the labs and project naming convention. 
+
