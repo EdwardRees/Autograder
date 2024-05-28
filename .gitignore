@@ -4,4 +4,4 @@ tests/
 ignore/
 log/
 config/students-accounts.csv
-# config/config.toml
+config/config.toml
