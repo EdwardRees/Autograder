@@ -1,0 +1,5 @@
+beautifulsoup4==4.12.3
+lxml==5.2.2
+mosspy==1.0.9
+soupsieve==2.5
+toml==0.10.2

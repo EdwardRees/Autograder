@@ -4,6 +4,7 @@ from util import get_course_name, get_name_username_pair, get_username_name_pair
 from clean import clean, clean_tests
 import logging
 from test import add_test_to_repo, run_tests
+from compare import compare_files
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,7 @@ def help_menu():
         - Test/Grade: Run the tests on the given assignment 
         - Clean: Remove the files associated with the assignment or tests
         - Analyze: Run simple analysis on the assignment results from the tests performed
+        - Compare: Compare student submissions with each other using Moss.
         Command Line Flags:
         - --assignment: The type of assignment to perform the optional action on: project, lab, inclass, or on the tests themselves
         - --name: The name of the assignment, used to concatenate on top of the project, lab, or inclass. For example, this flag would take a number for the labs and projects, but take the name of the inclass for the inclass.
@@ -120,6 +122,8 @@ def main():
       clean_tests()
     else:
       clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
+  elif arguments.get("type") == "compare":
+      print(compare_files(config, arguments.get("assignment_type"), arguments.get("assignment_name")))
 
   elif arguments.get("type") == "test" or arguments.get("type") == "grade":
     if "pull" in arguments:
