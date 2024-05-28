@@ -3,8 +3,8 @@ from os import chdir, getcwd, path
 from os.path import isdir
 from util import navigate_to_dir, walklevel
 import logging
-import http.server
-import socketserver
+from http.server import SimpleHTTPRequestHandler
+from socketserver import TCPServer
 
 logger = logging.getLogger(__name__)
 curr_dir = path.dirname(path.realpath(__file__))
@@ -86,17 +86,16 @@ def parse_report(assignment_type, assignment_name):
 def view_report(assignment_type, assignment_name):
     navigate_to_dir("assignments")
     chdir(f"{assignment_type}s/{assignment_type}-{assignment_name}")
-    class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    class RequestHandler(SimpleHTTPRequestHandler):
         def do_GET(self):
             if self.path == '/':
                 self.path = 'report.html'
-            return http.server.SimpleHTTPRequestHandler.do_GET(self)
+            return SimpleHTTPRequestHandler.do_GET(self)
 
-# Create an object of the above class
-    handler_object = MyHttpRequestHandler
+    handler_object = RequestHandler 
 
     PORT = 8000
-    my_server = socketserver.TCPServer(("", PORT), handler_object)
-    logger.info(f"Serving on port: {PORT}")
+    my_server = TCPServer(("", PORT), handler_object)
+    logger.info(f"Serving on port: http://localhost:{PORT}")
 
     my_server.serve_forever()
