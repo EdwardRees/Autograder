@@ -44,6 +44,8 @@ def clone(course_name, assignment_type, assignment_name, student_usernames):
     if assignment_type not in ["project", "lab", "inclass"]:
         print("Invalid assignment type")
         return
+    if not isdir("assignments"):
+        mkdir("assignments")
     chdir("assignments")
     if not isdir(f"{assignment_type}s"):
         mkdir(f"{assignment_type}s")

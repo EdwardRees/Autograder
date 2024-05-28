@@ -1,5 +1,7 @@
 __pycache__/
 assignments/*
-tests/*
+tests/
 ignore/
 log/
+config/students-accounts.csv
+# config/config.toml

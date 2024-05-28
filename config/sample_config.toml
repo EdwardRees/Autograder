@@ -1,0 +1,11 @@
+[ class ]
+course_name = ""  # GitHub Classroom name
+student_names = "" # File name for the student accounts csv file
+test_repo = "" # Repository with testcases
+moss_user_id = "" # Moss user id
+
+[ log ]
+debug = true # Debug mode to see output
+log_destination = "out.log" # Log file
+error_log_destination = "err.log" # Error log file
+
