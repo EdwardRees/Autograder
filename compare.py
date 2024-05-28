@@ -3,6 +3,8 @@ from os import chdir, getcwd, path
 from os.path import isdir
 from util import navigate_to_dir, walklevel
 import logging
+import http.server
+import socketserver
 
 logger = logging.getLogger(__name__)
 curr_dir = path.dirname(path.realpath(__file__))
@@ -75,12 +77,26 @@ def compare_files(config, assignment_type, assignment_name):
 def parse_report(assignment_type, assignment_name):
     """
     Parse the report created and find most problematic student code bases
+
+    Should flag students that have a similarity score over 75%
     """
     pass
 
 
 def view_report(assignment_type, assignment_name):
-    """
-    View the report by spinning up a simple python server to serve the report.html
-    """
-    pass
+    navigate_to_dir("assignments")
+    chdir(f"{assignment_type}s/{assignment_type}-{assignment_name}")
+    class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+        def do_GET(self):
+            if self.path == '/':
+                self.path = 'report.html'
+            return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
+# Create an object of the above class
+    handler_object = MyHttpRequestHandler
+
+    PORT = 8000
+    my_server = socketserver.TCPServer(("", PORT), handler_object)
+    logger.info(f"Serving on port: {PORT}")
+
+    my_server.serve_forever()

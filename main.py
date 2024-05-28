@@ -4,7 +4,7 @@ from util import get_course_name, get_name_username_pair, get_username_name_pair
 from clean import clean, clean_tests
 import logging
 from test import add_test_to_repo, run_tests
-from compare import compare_files
+from compare import compare_files, parse_report, view_report
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +23,8 @@ def help_menu():
         - --username: An optional flag used to perform the optional action on a specific student.
         - --student: An optional flag used to perform the optional action on a specific student, with the student's name provided.
         - --pull: An optional flag used to pull the latest test cases.
+        - --parse: An optional flag used to parse the report from the code comparisons
+        - --view: An optional flag used to view the report from the code comparisons
   """)
 
 def not_in(argv, flags):
@@ -53,13 +55,17 @@ def parse_args(argv):
     arguments["username"] = argv[username_flag + 1]
   if "--pull" in argv or "--update" in argv:
     arguments["pull"] = True
+  if "--parse" in argv:
+    arguments["parse"] = True
+  if "--view" in argv:
+    arguments["view"] = True
   if "--help" in argv or "-h" in argv:
     arguments["help"] = True
   return arguments
 
 def main():
   if len(argv) < 3:
-    print(f"Invalid usage: {argv[0]} <clone/grade/test/analyze/clean> --assignment <project/lab/inclass/tests> --name <number/assignment name> --student <student name> --username <username> --pull")
+    print(f"Invalid usage: {argv[0]} <clone/grade/test/analyze/clean> --assignment <project/lab/inclass/tests> --name <number/assignment name> --student <student name> --username <username> --pull --parse --view")
     return
   config = read_config("config/config.toml")
 
@@ -123,6 +129,11 @@ def main():
     else:
       clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
   elif arguments.get("type") == "compare":
+    if arguments.get("parse"):
+      parse_report(arguments.get("assignment_type"), arguments.get('assignment_name'))
+    elif arguments.get("view"):
+      view_report(arguments.get("assignment_type"), arguments.get("assignment_name"))
+    else:
       print(compare_files(config, arguments.get("assignment_type"), arguments.get("assignment_name")))
 
   elif arguments.get("type") == "test" or arguments.get("type") == "grade":
