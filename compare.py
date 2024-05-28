@@ -96,6 +96,12 @@ def view_report(assignment_type, assignment_name):
 
     PORT = 8000
     my_server = TCPServer(("", PORT), handler_object)
-    logger.info(f"Serving on port: http://localhost:{PORT}")
+    try:
+        logger.info(f"Serving on port: http://localhost:{PORT}")
+        my_server.serve_forever()
+    except KeyboardInterrupt:
+        print()
+        logger.info(f"Shutdown server on port {PORT}")
+        my_server.shutdown()
 
-    my_server.serve_forever()
+    chdir("../..")
