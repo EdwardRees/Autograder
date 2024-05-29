@@ -5,6 +5,7 @@ from util import navigate_to_dir, walklevel
 import logging
 from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer
+from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 curr_dir = path.dirname(path.realpath(__file__))
@@ -75,12 +76,51 @@ def compare_files(config, assignment_type, assignment_name):
 
 
 def parse_report(assignment_type, assignment_name):
-    """
-    Parse the report created and find most problematic student code bases
+    navigate_to_dir("assignments")
+    chdir(f"{assignment_type}s/{assignment_type}-{assignment_name}")
+    contents = ""
+    with open("report.html", 'r') as f:
+        contents = f.read()
+    soup = BeautifulSoup(contents, 'html.parser')
+    comparisons = soup.find_all("a")
+    comparisons = [tag for tag in comparisons if len(tag.get_text().split(" ")) == 2 and "%" in tag.get_text().split(" ")[1]]
+    pairs = {}
+    for i, links in enumerate(comparisons):
+        text = links.get_text()
+        file_name, percentage = text.split(" ")
 
-    Should flag students that have a similarity score over 75%
-    """
-    pass
+        # print(len(text))
+        # print(i, file_name, percentage)
+        username = (file_name.split("/")[-2]).split("-")[-1]
+        percentage = int(percentage[1:percentage.index("%")])
+        if percentage < 70:
+            continue
+        if i % 2 == 0:
+            if username not in pairs:
+                pairs[username] = []
+            next = comparisons[i + 1]
+            next_file_name, next_percentage = next.get_text().split(" ")
+            next_username = (next_file_name.split("/")[-2]).split("-")[-1]
+            if next_username not in pairs:
+                pairs[next_username] = []
+            next_percentage = int(next_percentage[1:next_percentage.index("%")])
+            pairs[username].append({next_username: percentage})
+            pairs[next_username].append({username: next_percentage})
+        else:
+            continue
+    flags = {}
+    for pair, paired in pairs.items():
+        if pair not in flags:
+            flags[pair] = []
+        for group in paired:
+            for name, score in group.items():
+                flags[pair].append(name)
+    print("Check the following users: ")
+    for pair in pairs:
+        for group in pairs[pair]:
+            for name, score in group.items():
+                print(f"\t- {pair} with {name}. Similarity score: {score}")
+    return (pairs, flags)
 
 
 def view_report(assignment_type, assignment_name):
