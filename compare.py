@@ -47,7 +47,7 @@ class Compare:
 
 
 def compare_files(config, assignment_type, assignment_name):
-    user_id = config.get("class").get("moss_user_id")
+    user_id = config.get("moss").get("moss_user_id")
     c = Compare(user_id, assignment_type, assignment_name)
     base_files = []
     student_files = []
@@ -88,9 +88,6 @@ def parse_report(assignment_type, assignment_name):
     for i, links in enumerate(comparisons):
         text = links.get_text()
         file_name, percentage = text.split(" ")
-
-        # print(len(text))
-        # print(i, file_name, percentage)
         username = (file_name.split("/")[-2]).split("-")[-1]
         percentage = int(percentage[1:percentage.index("%")])
         if percentage < 70:
@@ -115,12 +112,12 @@ def parse_report(assignment_type, assignment_name):
         for group in paired:
             for name, score in group.items():
                 flags[pair].append(name)
-    print("Check the following users: ")
+    output = "Check the following users:\n"
     for pair in pairs:
         for group in pairs[pair]:
             for name, score in group.items():
-                print(f"\t- {pair} with {name}. Similarity score: {score}")
-    return (pairs, flags)
+                output += f"\t- {pair} with {name}. Similarity score: {score}\n"
+    return (pairs, flags, output)
 
 
 def view_report(assignment_type, assignment_name):

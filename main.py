@@ -130,7 +130,7 @@ def main():
       clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
   elif arguments.get("type") == "compare":
     if arguments.get("parse"):
-      parse_report(arguments.get("assignment_type"), arguments.get('assignment_name'))
+      print(parse_report(arguments.get("assignment_type"), arguments.get('assignment_name'))[2])
     elif arguments.get("view"):
       view_report(arguments.get("assignment_type"), arguments.get("assignment_name"))
     else:
@@ -157,7 +157,11 @@ def main():
       logger.info("Tests must be cloned first!")
       clone_tests(config.get("class").get("test_repo"))
     add_test_to_repo(arguments.get("assignment_type"), arguments.get("assignment_name"), usernames)
-    run_tests(arguments.get("assignment_type"), arguments.get("assignment_name"), usernames)
+    plagiarism_checks = None
+    if config.get("moss").get("compare_with_test"):
+      plagiarism_checks = parse_report(arguments.get("assignment_type"), arguments.get("assignment_name"))[0]
+    run_tests(arguments.get("assignment_type"), arguments.get("assignment_name"), usernames, plagiarism_checks)
+
 
   
 

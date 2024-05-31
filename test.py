@@ -45,7 +45,7 @@ def run_test(assignment_type, assignment_name, username):
     return result
 
 
-def run_tests(assignment_type, assignment_name, student_usernames):
+def run_tests(assignment_type, assignment_name, student_usernames, plagarism_checks = None): 
     chdir(curr_dir)
     results = {}
     for username in student_usernames:
@@ -61,7 +61,18 @@ def run_tests(assignment_type, assignment_name, student_usernames):
     chdir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}")
     with open("results.txt", "w") as f:
         for name, result in results.items():
-            f.write(f"{name}\n")
+            """
+            If plagarism_checks is not None, check if the name is in the check pairs. If it is, add an additional f.write between the name and result that contains "FLAGGED FOR PLAGIARISM"
+            """
+            f.write(f"{name}")
+            if plagarism_checks is not None and name in plagarism_checks:
+                f.write(f" [FLAGGED FOR PLAGIARISM]\n\n")
+                f.write("Check with the following students:\n")
+                for group in plagarism_checks.get(name):
+                    for paired_name, score in group.items():
+                        f.write(f"\t- {name} with {paired_name}. Similarity score: {score}\n")
+
+            f.write("\n")
             f.write(f"{result}\n\n")
             f.write("-" * 40)
             f.write("\n\n\n")
