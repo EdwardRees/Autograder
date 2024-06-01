@@ -27,7 +27,7 @@ In the `config.toml` in the `config` folder, set the following variables:
 1. `course_name` should be set to the name of the GitHub classroom name or the GitHub organization.
 2. `student_names` should be set to the `csv` file containing the student names and username pairs.
 3. `test_repo` should be set the GitHub repository that contains testcases.
-4. `moss_userid` should be the user id given by moss after creating an account here [https://theory.stanford.edu/~aiken/moss/](https://theory.stanford.edu/~aiken/moss/)
+4. `moss_user_id` should be the user id given by moss after creating an account here [https://theory.stanford.edu/~aiken/moss/](https://theory.stanford.edu/~aiken/moss/)
 5. `compare_with_test` should be `true` or `false` if the plagiarism comparisons should be run when the code is tested too.
 6. `debug mode` should be set to `true` if the output should include `debug` level logged values. Otherwise this can be `false` if only `info` level values are required.
 7. `log_destination` should be set to the name of the log file.
