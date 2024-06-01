@@ -27,6 +27,12 @@ def clean(assignment_type, assignment_name):
         return
     remove_dir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}")
 
+def clean_single(assignment_type, assignment_name, username):
+    if not isdir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}/{assignment_type}-{assignment_name}-{username}"):
+        logger.error(f"Assignment {assignment_type}-{assignment_name}-{username} not found")
+        return
+    remove_dir(f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}/{assignment_type}-{assignment_name}-{username}")
+
 
 def clean_tests():
     for root, dirs, files in walklevel("tests"):

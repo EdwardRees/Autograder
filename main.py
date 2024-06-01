@@ -1,7 +1,7 @@
 from sys import argv, stdout
 from clone import clone, get_username, clone_tests, test_cloned_check, pull_tests
 from util import get_course_name, get_name_username_pair, get_username_name_pair, get_student_usernames, read_config, read_csv
-from clean import clean, clean_tests
+from clean import clean, clean_tests, clean_single
 import logging
 from test import add_test_to_repo, run_tests
 from compare import compare_files, parse_report, view_report
@@ -100,6 +100,7 @@ def main():
   student_csv = read_csv(config.get("class").get("student_names"))
   usernames = get_student_usernames(student_csv)
   name_username_dictionary = get_name_username_pair(student_csv)
+
   if arguments.get("help"):
     help_menu()
     return
@@ -127,7 +128,21 @@ def main():
     if arguments.get("assignment_type") == "tests":
       clean_tests()
     else:
-      clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
+      if "username" in arguments:
+        username = arguments.get("username")
+        if username not in usernames:
+          logger.error(f"Cannot clean assignment for non-existent student")
+          return
+        clean_single(arguments.get("assignment_type"), arguments.get("assignment_name"), username)
+      elif "student_name" in arguments:
+        username = get_username(name_username_dictionary, arguments.get("student_name"))
+        if username is None:
+          logger.error(f"Cannot clean assignment for non-existent student")
+          return
+        clean_single(arguments.get("assignment_type"), arguments.get("assignment_name"), username)
+      else:
+        clean(arguments.get("assignment_type"), arguments.get("assignment_name"))
+
   elif arguments.get("type") == "compare":
     if arguments.get("parse"):
       print(parse_report(arguments.get("assignment_type"), arguments.get('assignment_name'))[2])
