@@ -67,7 +67,7 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 
 ### Use Examples
 
-- `grade clone --assignment lab --name 5 --username johndoe` : Clone Lab 5 for johndoe specifically
+- `grade clone --assignment lab --name 5 --username johndoe`: Clone Lab 5 for johndoe specifically
 - `grade clone --assignment lab --name 5`: Clone all Lab 5s
 - `grade clone --assignment tests`: Clone the tests
 
@@ -77,6 +77,11 @@ Run `ln -s "$(pwd)/grade" /usr/local/bin/grade` to have access to using the `gra
 
 - `grade clean --assignment tests`: Remove the tests
 - `grade clean --assignment lab --name 5`: Remove the lab 5 repositories
+- `grade clean --assignment lab --name 5 --username johndoe`: Clean Lab 5 for johndoe specifically
+
+- `grade compare --assignment lab --name 5`: Run the comparison for plagiarism scripts for Lab 5
+- `grade compare --assignment lab --name 5 --parse`: Do not run the comparison, only parse the output
+- `grade compare --assignment lab --name 5 --view`: Do not run the comparison, view the output in a web view
 
 ## Todos
 
