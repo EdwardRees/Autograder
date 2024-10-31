@@ -97,7 +97,10 @@ def add_test_to_repo(assignment_type, assignment_name, usernames):
         actual = root.split("/")[-1]
         if actual == f"{assignment_type}-{assignment_name}":
             continue
-        if "-".join(actual.split("-")[2:]) in usernames:
+        possible_username_1 = "-".join(actual.split("-")[-1:])
+        possible_username_2 = "-".join(actual.split("-")[-2:])
+        if possible_username_1 in usernames or possible_username_2 in usernames:
+            # if "-".join(actual.split("-")[-1:]) in usernames: # TODO username may have a dash in it.
             chdir(root)
             with open("test.py", "w") as f:
                 f.write(test_file)

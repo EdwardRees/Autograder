@@ -72,8 +72,8 @@ def main():
   logging.basicConfig(format="%(name)s - %(levelname)s - %(message)s", level=logging.DEBUG if config.get("log").get("debug") else logging.INFO)
 
   stream_handle = logging.StreamHandler(stream=stdout)
-  file_handle = logging.FileHandler(f"log/{config.get("log").get("log_destination")}")
-  error_handle = logging.FileHandler(f"log/{config.get("log").get("error_log_destination")}")
+  file_handle = logging.FileHandler(f"log/{config.get('log').get('log_destination')}")
+  error_handle = logging.FileHandler(f"log/{config.get('log').get('error_log_destination')}")
 
   stream_handle.setLevel(logging.DEBUG if config.get("log").get("debug") else logging.INFO)
   file_handle.setLevel(logging.DEBUG)
