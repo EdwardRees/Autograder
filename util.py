@@ -67,6 +67,9 @@ def get_course_name(config):
     return config.get("class").get("course_name")
 
 
+def get_course_language(config):
+    return config.get("class").get("language")
+
 def get_name_username_pair(student_csv):
     accounts = {}
     contents = student_csv[1:]

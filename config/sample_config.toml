@@ -2,6 +2,7 @@
 course_name = ""  # GitHub Classroom name
 student_names = "" # File name for the student accounts csv file
 test_repo = "" # Repository with testcases
+language = "" # Programming language for the course
 
 [ moss ]
 moss_user_id = "" # Moss user id

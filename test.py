@@ -20,11 +20,18 @@ def read_test_files(assignment_type, assignment_name):
     chdir(f"{assignment_type}-{assignment_name}")
     logger.debug(f"Moved to {getcwd()}")
     test_file = ""
-    with open("test.py", "r") as f:
-        test_file = f.read()
+    test_file_type = ""
+    if isfile("test.py"):
+        with open("test.py", "r") as f:
+            test_file =f.read()
+            test_file_type = "py"
+    elif isfile("Test.java"):
+        with open("Test.java", "r") as f:
+            test_file =f.read()
+            test_file_type = "java"
     chdir("../../..")
     logger.debug(f"Moved to {getcwd()}")
-    return test_file
+    return (test_file,test_file_type)
 
 
 def run_test(assignment_type, assignment_name, username):
@@ -33,9 +40,12 @@ def run_test(assignment_type, assignment_name, username):
         f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}/{assignment_type}-{assignment_name}-{username}"
     )
     logger.debug(f"Navigated to {getcwd()}")
-
-    system("python3 test.py &> result.txt")
-    rmtree("__pycache__")
+    if isfile("test.py"):
+        system("python3 test.py &> result.txt")
+        rmtree("__pycache__")
+    elif isfile("Test.java"):
+        system("javac Test.java")
+        system("java Test &> result.txt")
     logger.debug(f"Tested for {assignment_type}-{assignment_name}-{username}")
     result = ""
     with open("result.txt", "r") as f:
@@ -88,7 +98,7 @@ def add_test_to_repo(assignment_type, assignment_name, usernames):
     if not assignment_cloned_check(assignment_type, assignment_name):
         logger.error(f"{assignment_type}-{assignment_name} assignment not cloned!")
         return False
-    test_file = read_test_files(assignment_type, assignment_name)
+    test_file, test_file_type = read_test_files(assignment_type, assignment_name)
     for root, _, _ in walk(
         f"assignments/{assignment_type}s/{assignment_type}-{assignment_name}"
     ):
@@ -102,8 +112,12 @@ def add_test_to_repo(assignment_type, assignment_name, usernames):
         if possible_username_1 in usernames or possible_username_2 in usernames:
             # if "-".join(actual.split("-")[-1:]) in usernames: # TODO username may have a dash in it.
             chdir(root)
-            with open("test.py", "w") as f:
-                f.write(test_file)
+            if test_file_type == "java":
+                with open("Test.java", "w") as f:
+                    f.write(test_file)
+            elif test_file_type == "py":
+                with open("test.py", "w") as f:
+                    f.write(test_file)
             logger.debug(f"Test file written out to {getcwd()}")
             chdir("../../../..")
             logger.debug(f"Navigated back to {getcwd()}")

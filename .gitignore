@@ -6,3 +6,4 @@ log/
 config/students-accounts.csv
 config/config.toml
 venv/
+flagged_students

@@ -1,7 +1,7 @@
 import mosspy
 from os import chdir, getcwd, path
 from os.path import isdir
-from util import navigate_to_dir, walklevel
+from util import navigate_to_dir, walklevel, get_course_language
 import logging
 from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer
@@ -9,12 +9,13 @@ from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 curr_dir = path.dirname(path.realpath(__file__))
-
+config = read_config("config/config.toml")
+language = get_course_language(config)
 
 class Compare:
     def __init__(self, userid, assignment_type, assignment_name):
         self.userid = userid
-        self.moss = mosspy.Moss(self.userid, "python")
+        self.moss = mosspy.Moss(self.userid, language)
         self.assignment_name = assignment_name
         self.assignment_type = assignment_type
 
@@ -60,16 +61,42 @@ def compare_files(config, assignment_type, assignment_name):
         for file in files:
             if file.endswith(".py"):
                 base_files.append(f"{getcwd()}/{root}/{file}")
+            if file.endswith(".java"):
+                base_files.append(f"{getcwd()}/{root}/{file}")
+        if "templates" in dirs:
+            for root2, dirs2, files2 in walklevel(f"{assignment_type}-{assignment_name}-starter-code/templates"):
+                for file in files2:
+                    if file.endswith(".html"):
+                        base_files.append(f"{getcwd()}/{root}/templates/{file}")
+        if "static" in dirs:
+            for root2, dirs2, files2 in walklevel(f"{assignment_type}-{assignment_name}-starter-code/static/styles/"):
+                for file in files2:
+                    if file.endswith(".css"):
+                        base_files.append(f"{getcwd()}/{root}/static/styles/{file}")
+
     for root, dirs, files in walklevel("."):
         for dir in dirs:
             if dir.endswith("starter-code"):
                 continue
             for inner_root, inner_dirs, inner_files in walklevel(dir):
                 for file in inner_files:
-                    if file == "test.py":
+                    if file == "test.py" or "Test.java" in file:
                         continue
                     if file.endswith(".py"):
                         student_files.append(f"{getcwd()}/{inner_root}/{file}")
+                    if file.endswith(".java"):
+                        student_files.append(f"{getcwd()}/{inner_root}/{file}")
+                if "templates" in inner_dirs:
+                    for inner_root_2, inner_dirs_2, inner_files_2 in walklevel(f"{dir}/templates"):
+                        for file in inner_files_2:
+                            if file.endswith(".html"):
+                                student_files.append(f"{getcwd()}/{inner_root}/templates/{file}")
+                if "static" in inner_dirs:
+                    for inner_root_2, inner_dirs_2, inner_files_2 in walklevel(f"{dir}/static/styles/"):
+                        for file in inner_files_2:
+                            if file.endswith(".css"):
+                                student_files.append(f"{getcwd()}/{inner_root}/static/styles/{file}")
+
     c.add_files(base_files, student_files)
     c.send()
     chdir("../..")
