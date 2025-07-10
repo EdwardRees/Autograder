@@ -1,9 +1,9 @@
-from os import path, system, mkdir, remove, getcwd, chdir
+from os import path, system, mkdir, remove, getcwd, chdir, rename
 from os.path import isdir, isfile
 import logging
 from util import navigate_to_dir, walk
 from clone import test_cloned_check, assignment_cloned_check
-from shutil import rmtree
+from shutil import rmtree, copy
 
 curr_dir = path.dirname(path.realpath(__file__))
 logger = logging.getLogger(__name__)
@@ -23,16 +23,15 @@ def read_test_files(assignment_type, assignment_name):
     test_file_type = ""
     if isfile("test.py"):
         with open("test.py", "r") as f:
-            test_file =f.read()
+            test_file = f.read()
             test_file_type = "py"
-    elif isfile("Test.java"):
-        with open("Test.java", "r") as f:
-            test_file =f.read()
+    elif isfile("Tests.java"):
+        with open("Tests.java", "r") as f:
+            test_file = f.read()
             test_file_type = "java"
     chdir("../../..")
     logger.debug(f"Moved to {getcwd()}")
     return (test_file,test_file_type)
-
 
 def run_test(assignment_type, assignment_name, username):
     chdir(curr_dir)
@@ -43,9 +42,9 @@ def run_test(assignment_type, assignment_name, username):
     if isfile("test.py"):
         system("python3 test.py &> result.txt")
         rmtree("__pycache__")
-    elif isfile("Test.java"):
-        system("javac Test.java")
-        system("java Test &> result.txt")
+    elif isfile("run_java_tests.py"):
+        system("python3 run_java_tests.py")
+        rename("test-results.txt", "result.txt") 
     logger.debug(f"Tested for {assignment_type}-{assignment_name}-{username}")
     result = ""
     with open("result.txt", "r") as f:
@@ -113,8 +112,13 @@ def add_test_to_repo(assignment_type, assignment_name, usernames):
             # if "-".join(actual.split("-")[-1:]) in usernames: # TODO username may have a dash in it.
             chdir(root)
             if test_file_type == "java":
-                with open("Test.java", "w") as f:
+                print("made it here")
+                with open("Tests.java", "w") as f:
                     f.write(test_file)
+                if not isdir("lib"):
+                    mkdir("lib")
+                copy("../../../../java/lib/junit-platform-console-standalone-1.9.2.jar", "lib/junit-platform-console-standalone-1.9.2.jar")
+                copy("../../../../java/run_java_tests.py", "run_java_tests.py")
             elif test_file_type == "py":
                 with open("test.py", "w") as f:
                     f.write(test_file)

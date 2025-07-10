@@ -1,7 +1,7 @@
 import mosspy
 from os import chdir, getcwd, path
 from os.path import isdir
-from util import navigate_to_dir, walklevel, get_course_language
+from util import navigate_to_dir, walklevel, get_course_language, read_config
 import logging
 from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer

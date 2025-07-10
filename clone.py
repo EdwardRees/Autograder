@@ -28,7 +28,7 @@ def get_username(names, name):
 
 
 def clone_starter_code(course_name, assignment_type, assignment_name):
-    if assignment_type not in ["project", "lab", "inclass"]:
+    if assignment_type not in ["project", "lab", "inclass", "extra-credit", "final"]:
         logger.info(f"Invalid assignment type: {assignment_type}")
         return
     dir_name = f"{assignment_type}-{assignment_name}-starter-code"
@@ -48,7 +48,7 @@ def clone_starter_code(course_name, assignment_type, assignment_name):
 
 
 def clone_assignment(course_name, assignment_type, assignment_name, username):
-    if assignment_type not in ["project", "lab", "inclass"]:
+    if assignment_type not in ["project", "lab", "inclass", "extra-credit", "final"]:
         logger.info(f"Invalid assignment type: {assignment_type}")
         return
     dir_name = f"{assignment_type}-{assignment_name}-{username}"
@@ -70,7 +70,7 @@ def clone_assignment(course_name, assignment_type, assignment_name, username):
 
 
 def clone(course_name, assignment_type, assignment_name, student_usernames):
-    if assignment_type not in ["project", "lab", "inclass"]:
+    if assignment_type not in ["project", "lab", "inclass", "extra-credit", "final"]:
         print("Invalid assignment type")
         return
     if not isdir("assignments"):

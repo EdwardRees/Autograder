@@ -2,7 +2,7 @@
 
 This is an autograder for Python. It assumes students are using GitHub Classrooms for their assignments.
 
-The project clones student assignments, deletes the `.git` directory, inserts test code into each students' repository, and runs the test cases. Additionally, this code also connects to moss, implementing a simple plagiarismchecker/code comparison to allow for a simple first-glance toward identifying potential cases of plagiarism.
+The project clones student assignments, deletes the `.git` directory, inserts test code into each students' repository, and runs the test cases. Additionally, this code also connects to moss, implementing a simple plagiarism checker/code comparison to allow for a simple first-glance toward identifying potential cases of plagiarism.
 
 ## Setup
 
